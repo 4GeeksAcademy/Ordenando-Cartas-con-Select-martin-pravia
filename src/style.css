@@ -10,5 +10,12 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 8px;
+}
+
+.red {
   color: red;
+}
+
+.black {
+  color: black;
 }

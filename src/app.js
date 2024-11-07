@@ -14,21 +14,11 @@ import "./assets/img/4geeks.ico";
 
 // 1)
 let palos = ["♠", "♣", "♦", "♥"];
-let numerosYLetras = [
-  "A",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "J",
-  "Q",
-  "K"
-];
+let numerosYLetras = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+let cartas = [];
+
+let btndrow = document.querySelector(".dibujar");
+let btnSort = document.querySelector(".ordenar");
 
 // 2)
 function crearCarta(palo, numero) {
@@ -37,20 +27,20 @@ function crearCarta(palo, numero) {
     "carta",
     "mt-3",
     "p-1",
-    palo === "♥" || palo === "♦" ? "red" : "black"
+    palos[palo] === "♥" || palos[palo] === "♦" ? "red" : "black"
   );
 
   const paloArriba = document.createElement("div");
   paloArriba.classList.add("paloArriba", "text-start", "m-0");
-  paloArriba.textContent = palo;
+  paloArriba.textContent = palos[palo];
 
   const numeroLetra = document.createElement("div");
   numeroLetra.classList.add("numeroLetra", "text-center");
-  numeroLetra.textContent = numero;
+  numeroLetra.textContent = changeValue(numerosYLetras[numero]);
 
   const paloAbajo = document.createElement("div");
-  paloArriba.classList.add("paloAbajo", "text-end", "m-0");
-  paloArriba.textContent = palo;
+  paloAbajo.classList.add("paloAbajo", "text-end", "m-0");
+  paloAbajo.textContent = palos[palo];
 
   carta.appendChild(paloArriba);
   carta.appendChild(numeroLetra);
@@ -59,21 +49,33 @@ function crearCarta(palo, numero) {
   return carta;
 }
 
+function changeValue(numero) {
+  switch (numero) {
+    case 1:
+      return "A";
+    case 11:
+      return "J";
+    case 12:
+      return "Q";
+    case 13:
+      return "K";
+    default:
+      return numero;
+  }
+}
+
 // 3
 function repartirCartas(numeroIngresado) {
-  cartas = [];
-  const cartasRepartidas = document.querySelector("cartasMano");
+  const cartasRepartidas = document.querySelector("#cartasMano");
   cartasRepartidas.innerHTML = "";
 
   for (let i = 0; i < numeroIngresado; i++) {
-    const paloRandom = palos(Math.floor(Math.random() * palos.length));
-    const numerosYLetrasRandom = numerosYLetras(
-      Math.floor(Math.random()) * numerosYLetras.length
-    );
-    const carta = { palo: paloRandom, numero: numerosYLetrasRandom };
+    const paloRandom = Math.floor(Math.random() * palos.length);
+    const numerosRandom = Math.floor(Math.random() * numerosYLetras.length);
+    const carta = { palo: paloRandom, numero: numerosRandom };
     cartas.push(carta);
 
-    cartasRepartidas.appendChild;
+    cartasRepartidas.appendChild(crearCarta(paloRandom, numerosRandom));
   }
 }
 
@@ -81,3 +83,14 @@ function repartirCartas(numeroIngresado) {
 function ordenarCartas() {}
 
 // 5)
+
+btndrow.addEventListener("click", () => {
+  let total = document.getElementById("cardsNumber").value;
+  if (total > 0) repartirCartas(total);
+  console.log(cartas);
+});
+
+btnSort.addEventListener("click", () => {
+  console.log("Prueba boton presionado");
+  ordenarCartas();
+});

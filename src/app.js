@@ -5,22 +5,14 @@ import "./style.css";
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
-// pasos:
-// 1) definir los palos y numeros de cartas
-// 2) generar funcion para crear carta (tiene que tener un createElement con div (dentro del div parte de arriba, medio y abajo)
-// 3) funcion que luego de creada las reparta
-// 4) generar funcion para ordenar esas cartas (hay que mostrar con bubble y que se muestyre el proceso de ordenado)
-// 5) Event listeners para que funcione (leer el input de numero, el boton de crear carta y el de ordenar carta)
-
-// 1)
 let palos = ["♠", "♣", "♦", "♥"];
 let numerosYLetras = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let cartas = [];
+let cartasOrdenadas = [];
 
 let btndrow = document.querySelector(".dibujar");
 let btnSort = document.querySelector(".ordenar");
 
-// 2)
 function crearCarta(palo, numero) {
   const carta = document.createElement("div");
   carta.classList.add(
@@ -64,11 +56,10 @@ function changeValue(numero) {
   }
 }
 
-// 3
 function repartirCartas(numeroIngresado) {
   const cartasRepartidas = document.querySelector("#cartasMano");
   cartasRepartidas.innerHTML = "";
-
+  cartas = [];
   for (let i = 0; i < numeroIngresado; i++) {
     const paloRandom = Math.floor(Math.random() * palos.length);
     const numerosRandom = Math.floor(Math.random() * numerosYLetras.length);
@@ -79,10 +70,24 @@ function repartirCartas(numeroIngresado) {
   }
 }
 
-// 4)
-function ordenarCartas() {}
-
-// 5)
+function ordenarCartas(cartas) {
+  for (let index = 0; index < cartas.length - 1; index++) {
+    let min = index;
+    for (let j = min + 1; j < cartas.length; j++) {
+      if (cartas[j].numero < cartas[min].numero) {
+        min = j;
+      }
+    }
+    if (min !== index) {
+      const temp = cartas[index];
+      cartas[index] = cartas[min];
+      cartas[min] = temp;
+      cartasOrdenadas.push(cartas);
+    }
+    cartasOrdenadas.push(cartas);
+  }
+  return cartas;
+}
 
 btndrow.addEventListener("click", () => {
   let total = document.getElementById("cardsNumber").value;
@@ -91,6 +96,23 @@ btndrow.addEventListener("click", () => {
 });
 
 btnSort.addEventListener("click", () => {
-  console.log("Prueba boton presionado");
-  ordenarCartas();
+  ordenarCartas([...cartas]);
+  console.log(cartasOrdenadas);
+  mostrarOrdenamiento();
 });
+
+function mostrarOrdenamiento() {
+  const contenedorCartas = document.querySelector(".contenedorCartas");
+  contenedorCartas.innerHTML = "";
+  for (let i = 0; i < cartasOrdenadas.length; i++) {
+    const cartasMano = document.createElement("div");
+    cartasMano.classList.add("d-flex");
+
+    for (let j = 0; j < cartasOrdenadas[i].length; j++) {
+      cartasMano.appendChild(
+        crearCarta(cartasOrdenadas[i][j].palo, cartasOrdenadas[i][j].numero)
+      );
+    }
+    contenedorCartas.appendChild(cartasMano);
+  }
+}

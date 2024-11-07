@@ -82,9 +82,8 @@ function ordenarCartas(cartas) {
       const temp = cartas[index];
       cartas[index] = cartas[min];
       cartas[min] = temp;
-      cartasOrdenadas.push(cartas);
+      cartasOrdenadas.push([...cartas]);
     }
-    cartasOrdenadas.push(cartas);
   }
   return cartas;
 }
